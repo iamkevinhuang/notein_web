@@ -1,0 +1,28 @@
+<%= form_tag (login_users_path) %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= "Username" %>
+    <%= text_field_tag :username %>
+  </div>
+
+  <div class="field">
+    <%= "Password" %>
+    <%= password_field_tag :password %>
+  </div>
+
+  <div class="actions">
+    <input type="submit", value="Login">
+  </div>
+
+<%= link_to 'Register', new_user_path %>
