@@ -18,7 +18,16 @@ class Api::NotesController < ApplicationController
         if @note.save
             render json: @note, status: :created, location: @note
         else
-            render json: @note.errors, status: :unprocessable_entity
+            error_string = ""
+            if @note.errors
+                @note.errors.full_messages.each do |msg|
+                    error_string += "#{msg}, "
+                end
+                error_string = error_string[0..-3]
+            else
+                error_string = "Terjadi Kesalahan sistem, silahkan ulangi beberapa saat lagi !"
+            end
+            render json: {error: error_string}, status: :unprocessable_entity
         end
     end
 
@@ -26,7 +35,16 @@ class Api::NotesController < ApplicationController
         if @note.update(note_params)
             render json: @note
         else
-            render json: @note.errors, status: :unprocessable_entity
+            error_string = ""
+            if @note.errors
+                @note.errors.full_messages.each do |msg|
+                    error_string += "#{msg}, "
+                end
+                error_string = error_string[0..-3]
+            else
+                error_string = "Terjadi Kesalahan sistem, silahkan ulangi beberapa saat lagi !"
+            end
+            render json: {error: error_string}, status: :unprocessable_entity
         end
     end
 
@@ -41,7 +59,7 @@ class Api::NotesController < ApplicationController
             @note = Note.find(params[:id])
 
             unless @note.user_id == @user.id
-                render json: {error: "Catatan ini bukan milik anda !"}
+                render json: {error: "Catatan ini bukan milik anda !"}, status: :unprocessable_entity
             end
         end
 

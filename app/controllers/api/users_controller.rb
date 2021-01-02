@@ -9,7 +9,16 @@ class Api::UsersController < ApplicationController
             token = encode_token({user_id: @user.id})
             render json: {user: @user, token: token}
         else
-            render json: {error: "Username atau Password Salah !"}
+            error_string = ""
+            if @user.errors
+                @user.errors.full_messages.each do |msg|
+                    error_string += "#{msg}, "
+                end
+                error_string = error_string[0..-3]
+            else
+                error_string = "Terjadi Kesalahan sistem, silahkan ulangi beberapa saat lagi !"
+            end
+            render json: {error: error_string}, status: :unprocessable_entity
         end
     end
 
@@ -21,9 +30,27 @@ class Api::UsersController < ApplicationController
             token = encode_token({user_id: @user.id})
             render json: {user: @user, token: token}
         else
-            render json: {error: "Username atau Password Salah !"}
+            render json: {error: "Username atau Password Salah !"}, status: :unprocessable_entity
         end
     end
+
+    def update
+        if @user.update(user_params)
+            render json: @cususertomer
+        else
+            error_string = ""
+            if @user.errors
+                @user.errors.full_messages.each do |msg|
+                    error_string += "#{msg}, "
+                end
+                error_string = error_string[0..-3]
+            else
+                error_string = "Terjadi Kesalahan sistem, silahkan ulangi beberapa saat lagi !"
+            end
+
+            render json: {error: error_string}, status: :unprocessable_entity
+        end
+    end 
 
 
     def auto_login
