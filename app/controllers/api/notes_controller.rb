@@ -57,7 +57,8 @@ class Api::NotesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
         def set_note
             @note = Note.find(params[:id])
-
+            authorized_token
+            
             unless @note.user_id == @user.id
                 render json: {error: "Catatan ini bukan milik anda !"}, status: :unprocessable_entity
             end
