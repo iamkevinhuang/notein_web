@@ -1,5 +1,5 @@
 class Api::UsersController < ApplicationController
-    before_action :authorized_token, only: [:auto_login]
+    before_action :authorized_token, only: [:auto_login, :update, :destroy]
     skip_before_action :verify_authenticity_token
 
     # REGISTER
@@ -58,7 +58,6 @@ class Api::UsersController < ApplicationController
     end
 
     def destroy
-        @user = User.find params[:id]
         @user.destroy
         render json: {message: "User telah di hapus !"}
     end
