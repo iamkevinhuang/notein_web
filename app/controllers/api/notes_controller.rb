@@ -14,6 +14,7 @@ class Api::NotesController < ApplicationController
 
     def create
         @note = Note.new(note_params)
+        @note.user_id = @user.id
 
         if @note.save
             render json: @note, status: :created, location: @note
